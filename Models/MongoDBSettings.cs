@@ -1,4 +1,4 @@
-namespace dc_contractform;
+namespace DC_CONTRACTFORM.Models;
 
 public class MongoDBSettings {
     public string ConnectionURI { get; set;} = null!;

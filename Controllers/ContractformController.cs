@@ -33,7 +33,7 @@ public class ContractformController: Controller {
         return NoContent();
     }
 
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id) {
         await _mongoDBService.DeleteAsync(id);
         return NoContent();

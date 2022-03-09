@@ -25,6 +25,19 @@ public class MongoDBService {
         return await _contractformCollection.Find(new BsonDocument()).ToListAsync();
     }
 
+    public async Task<List<Contractform>> SearchAsync(string search) {
+        // "/^" = starts with, "/i" = ignore case
+        var regexSearch = "/^" + search + "/i";
+        // Console.WriteLine(regexSearch);
+
+        FilterDefinition<Contractform> filter = 
+          Builders<Contractform>.Filter.Regex("dogName", regexSearch)
+        | Builders<Contractform>.Filter.Regex("firstName", regexSearch)
+        | Builders<Contractform>.Filter.Regex("lastName", regexSearch);
+
+        return await _contractformCollection.Find(filter).ToListAsync();
+    }
+
     public async Task UpdateFirstNameAsync(string id, string firstName) {
         FilterDefinition<Contractform> filter = Builders<Contractform>.Filter.Eq("Id", id);
         // UpdateDefinition<Contractform> update = Builders<Contractform>.Update.AddToSet<string>("firstName", contractformId);

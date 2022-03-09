@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using DC_CONTRACTFORM.Models;
 using DC_CONTRACTFORM.Services;
 
+
 namespace DC_CONTRACTFORM.Controllers;
 
 [Controller]
@@ -19,6 +20,12 @@ public class ContractformController: Controller {
     public async Task<List<Contractform>> Get() {
         return await _mongoDBService.GetAsync();
     }
+
+    [HttpGet("search")]
+    public async Task<List<Contractform>> Search([FromQuery]string search) {
+        return await _mongoDBService.SearchAsync(search);
+    }
+
 
     [HttpPost]
     //                                     accept data playload from body

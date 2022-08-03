@@ -41,3 +41,4 @@
 /Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/obj/Debug/net6.0/ref/dc-contractform.dll
 /Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/obj/Debug/net6.0/dc-contractform.pdb
 /Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/obj/Debug/net6.0/dc-contractform.genruntimeconfig.cache
+/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/bin/Debug/net6.0/Newtonsoft.Json.dll

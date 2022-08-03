@@ -2,9 +2,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
-namespace DC_CONTRACTFORM.Models;
+namespace dc_api.Models;
 
-public class Contractform {
+public class Customer {
 
     // Allows us to work with  Id as a string within .net core application
     // Saved as an objectId in MongoDB

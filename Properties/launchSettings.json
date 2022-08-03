@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "dc_contractform": {
+    "dc_api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

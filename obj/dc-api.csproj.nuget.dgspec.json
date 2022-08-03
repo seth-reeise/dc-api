@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/dc-contractform.csproj": {}
+    "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/dc-api.csproj": {}
   },
   "projects": {
-    "/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/dc-contractform.csproj": {
+    "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/dc-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/dc-contractform.csproj",
-        "projectName": "dc-contractform",
-        "projectPath": "/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/dc-contractform.csproj",
+        "projectUniqueName": "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/dc-api.csproj",
+        "projectName": "dc-api",
+        "projectPath": "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/dc-api.csproj",
         "packagesPath": "/Users/Seth/.nuget/packages/",
-        "outputPath": "/Users/Seth/Documents/Developer/thedivinecanine/dc-contractform/obj/",
+        "outputPath": "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Seth/.nuget/NuGet/NuGet.Config"

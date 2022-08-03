@@ -6,14 +6,14 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "dc-contractform/1.0.0": {
+      "dc-api/1.0.0": {
         "dependencies": {
           "MongoDB.Driver": "2.14.1",
           "Newtonsoft.Json": "13.0.1",
           "Swashbuckle.AspNetCore": "6.1.5"
         },
         "runtime": {
-          "dc-contractform.dll": {}
+          "dc-api.dll": {}
         }
       },
       "DnsClient/1.4.0": {
@@ -193,7 +193,7 @@
     }
   },
   "libraries": {
-    "dc-contractform/1.0.0": {
+    "dc-api/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

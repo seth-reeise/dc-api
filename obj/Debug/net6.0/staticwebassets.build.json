@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "yuMfMQ/31IUX6rKzNOSm1YE8/pYBXHiz9O0LmIVteBU=",
-  "Source": "dc-contractform",
-  "BasePath": "_content/dc-contractform",
+  "Hash": "xfJsLKdJNGuhDkz9tVIks6KDZLS888GE7aMXx0vL0H4=",
+  "Source": "dc-api",
+  "BasePath": "_content/dc-api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

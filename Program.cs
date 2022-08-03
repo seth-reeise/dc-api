@@ -1,6 +1,7 @@
-using DC_CONTRACTFORM.Models;
-using DC_CONTRACTFORM.Services;
+using dc_api.Models;
+using dc_api.Services;
 using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,15 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 // Create Singleton instance 
-builder.Services.AddSingleton<MongoDBService>();
+builder.Services.AddSingleton<CustomerService>();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "dc_contractform", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "dc-api", Version = "v1" });
 });
+
+// Add CORS
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+    {
+        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    }));
 
 var app = builder.Build();
 
@@ -24,7 +31,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dc_contractform v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dc-api v1"));
 }
 
 app.UseHttpsRedirection();
@@ -32,5 +39,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("corsapp");
 
 app.Run();

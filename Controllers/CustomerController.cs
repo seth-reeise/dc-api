@@ -6,16 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dc_api.Controllers;
 
-[Controller]
-[Route("api/[controller]")]
-public class CustomerController: Controller {
+[Route("api/customer")]
+public class CustomerController: ControllerBase
+{
+    private readonly ICustomerService _customerService;
 
-    private readonly CustomerService _customerService;
-
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(ICustomerService customerService) {
         _customerService = customerService;
     }
-
+    
     [HttpGet]
     public async Task<List<Customer>> Get() {
         return await _customerService.GetAsync();
@@ -28,7 +27,6 @@ public class CustomerController: Controller {
 
 
     [HttpPost]
-    //                                     accept data playload from body
     public async Task<IActionResult> Post([FromBody] Customer customer) {
         await _customerService.CreateAsync(customer);
         return CreatedAtAction(nameof(Get), new { id = customer.Id}, customer);

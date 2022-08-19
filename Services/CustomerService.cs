@@ -5,7 +5,7 @@ using MongoDB.Bson;
 
 namespace dc_api.Services;
 
-public class CustomerService {
+public class CustomerService: ICustomerService {
 
     private readonly IMongoCollection<Customer> _customerCollection;
 
@@ -14,8 +14,7 @@ public class CustomerService {
         IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
         _customerCollection = database.GetCollection<Customer>(mongoDBSettings.Value.CollectionName);
     }
-
-    // can call whatever
+    
     public async Task CreateAsync(Customer customer) {
         await _customerCollection.InsertOneAsync(customer);
         return;
@@ -28,7 +27,6 @@ public class CustomerService {
     public async Task<List<Customer>> SearchAsync(string search) {
         // "/^" = starts with, "/i" = ignore case
         var regexSearch = "/^" + search + "/i";
-        // Console.WriteLine(regexSearch);
 
         FilterDefinition<Customer> filter = 
           Builders<Customer>.Filter.Regex("dogName", regexSearch)
@@ -40,9 +38,8 @@ public class CustomerService {
 
     public async Task UpdateFirstNameAsync(string id, string firstName) {
         FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("Id", id);
-        // UpdateDefinition<Customer> update = Builders<Customer>.Update.AddToSet<string>("firstName", firstName);
-        UpdateDefinition<Customer> update1 = Builders<Customer>.Update.Set<string>("firstName", firstName);
-        await _customerCollection.UpdateOneAsync(filter, update1);
+        UpdateDefinition<Customer> update = Builders<Customer>.Update.Set<string>("firstName", firstName);
+        await _customerCollection.UpdateOneAsync(filter, update);
         return;        
     }
 

@@ -1,6 +1,5 @@
 using dc_api.Models;
 using dc_api.Services;
-using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 // Create Singleton instance 
-builder.Services.AddSingleton<CustomerService>();
+builder.Services.AddSingleton<ICustomerService, CustomerService>();
 
 // Add services to the container.
 

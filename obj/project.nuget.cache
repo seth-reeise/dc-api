@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QGFMvECVk5NunfESnW11QgZ1dpg1tnQg7K/245QyFjb49Sjx9aNyXs0GV2WqZXTpS3N7q4y7P3g/xzwMVatugw==",
+  "dgSpecHash": "+dVy5V+2HWs33n+pqWQcuUTdKCo2rgv0YnZF754RYr3nqk86m9DPUnEHLjQdhsbtLzMpJ9sarUu2hQ2akiH04w==",
   "success": true,
-  "projectFilePath": "/Users/Seth/Documents/Developer/thedivinecanine/dc-api/dc-api.csproj",
+  "projectFilePath": "/Users/Seth/Documents/The Divine Canine/repos/dc-api/dc-api.csproj",
   "expectedPackageFiles": [
     "/Users/Seth/.nuget/packages/dnsclient/1.4.0/dnsclient.1.4.0.nupkg.sha512",
     "/Users/Seth/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",

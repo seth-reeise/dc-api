@@ -17,14 +17,13 @@ public class CustomerService: ICustomerService {
     
     public async Task CreateAsync(Customer customer) {
         await _customerCollection.InsertOneAsync(customer);
-        return;
     }
 
-    public async Task<List<Customer>> GetAsync() {
+    public async Task<List<Customer>> GetAllCustomers() {
         return await _customerCollection.Find(new BsonDocument()).ToListAsync();
     }
 
-    public async Task<List<Customer>> SearchAsync(string search) {
+    public async Task<List<Customer>> SearchCustomers(string search) {
         // "/^" = starts with, "/i" = ignore case
         var regexSearch = "/^" + search + "/i";
 
@@ -36,18 +35,20 @@ public class CustomerService: ICustomerService {
         return await _customerCollection.Find(filter).ToListAsync();
     }
 
-    public async Task UpdateFirstNameAsync(string id, string firstName) {
+    public async Task<Customer?> SearchCustomerById(string id)
+    {
+        return await _customerCollection.Find(customer => customer.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateFirstName(string id, string firstName) {
         FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("Id", id);
         UpdateDefinition<Customer> update = Builders<Customer>.Update.Set<string>("firstName", firstName);
         await _customerCollection.UpdateOneAsync(filter, update);
-        return;        
     }
 
-    public async Task DeleteAsync(string id) {
-        FilterDefinition<Customer> filter = Builders<Customer>.Filter.Eq("Id", id);
-        await _customerCollection.DeleteOneAsync(filter);
-        return;
-    } 
-
+    public async Task<bool> DeleteCustomer(string id) {
+        var deleteResult = await _customerCollection.DeleteOneAsync(customer => customer.Id == id);
+        return deleteResult.IsAcknowledged;
+    }
 }
 

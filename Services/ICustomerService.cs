@@ -6,11 +6,12 @@ public interface ICustomerService
 {
     Task CreateAsync(Customer customer);
 
-    Task<List<Customer>> GetAsync();
+    Task<List<Customer>> GetAllCustomers();
 
-    Task<List<Customer>> SearchAsync(string search);
+    Task<List<Customer>> SearchCustomers(string search);
 
-    Task UpdateFirstNameAsync(string id, string firstName);
+    Task UpdateFirstName(string id, string firstName);
 
-    Task DeleteAsync(string id);
+    Task<bool> DeleteCustomer(string id); 
+    Task<Customer?> SearchCustomerById(string id);
 }

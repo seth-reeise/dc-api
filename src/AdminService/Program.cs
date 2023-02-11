@@ -1,8 +1,13 @@
 using dc_api.Models;
 using dc_api.Services;
-
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() {Title = "AdminService", Version = "v1"}); });
 
 // bind setting and Mongo service
 
@@ -10,19 +15,11 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 // Create Singleton instance 
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "dc-api", Version = "v1" });
-});
-
 // Add CORS
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
-    {
-        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-    }));
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -30,7 +27,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dc-api v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AdminService v1"));
 }
 
 app.UseHttpsRedirection();

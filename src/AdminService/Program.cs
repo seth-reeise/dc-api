@@ -1,6 +1,7 @@
 using dc_api.Models;
 using dc_api.Services;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() {Title = "AdminService", Version = "v1"}); });
 
 // bind setting and Mongo service
-
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+var connectionUri = Environment.GetEnvironmentVariable("CONNECTION_URI");
+var client = new MongoClient(connectionUri);
+var database = client.GetDatabase("The_divine_canine");
+builder.Services.AddSingleton(database);
+    
 // Create Singleton instance 
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 

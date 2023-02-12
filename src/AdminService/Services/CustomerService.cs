@@ -9,12 +9,10 @@ public class CustomerService: ICustomerService {
 
     private readonly IMongoCollection<Customer> _customerCollection;
 
-    public CustomerService(IOptions<MongoDBSettings> mongoDBSettings) {
-        MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
-        IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-        _customerCollection = database.GetCollection<Customer>(mongoDBSettings.Value.CollectionName);
+    public CustomerService(IMongoDatabase database) {
+        _customerCollection = database.GetCollection<Customer>("contract_form");
     }
-    
+
     public async Task CreateAsync(Customer customer) {
         await _customerCollection.InsertOneAsync(customer);
     }

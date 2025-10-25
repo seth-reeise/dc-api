@@ -1,6 +1,6 @@
 # dc-api
 
-API for the admin side of The Divine Canine.
+API for the admin side of The Divine Canine. 
 
 ## Configuration
 
@@ -23,4 +23,6 @@ Then run the API:
 ```bash
 dotnet run --project src/AdminService/AdminService.csproj
 ```
+
+For more detailed configuration information, see [CLAUDE.md](CLAUDE.md).
 

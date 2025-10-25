@@ -1,7 +1,7 @@
 using System;
 using System.Net;
-using dc_api.Models;
-using dc_api.Services;
+using AdminService.Models;
+using AdminService.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dc_api.Controllers;

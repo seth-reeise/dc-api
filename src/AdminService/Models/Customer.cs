@@ -1,8 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Text.Json.Serialization;
 
-namespace dc_api.Models;
+namespace AdminService.Models;
 
 public class Customer {
 

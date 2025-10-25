@@ -1,9 +1,9 @@
-using dc_api.Models;
+using AdminService.Models;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
-namespace dc_api.Services;
+namespace AdminService.Services;
 
 public class CustomerService: ICustomerService {
 

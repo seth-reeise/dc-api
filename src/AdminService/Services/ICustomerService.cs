@@ -1,6 +1,6 @@
-using dc_api.Models;
+using AdminService.Models;
 
-namespace dc_api.Services;
+namespace AdminService.Services;
 
 public interface ICustomerService
 {

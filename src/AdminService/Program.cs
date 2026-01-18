@@ -39,3 +39,6 @@ app.MapControllers();
 app.UseCors("corsapp");
 
 app.Run();
+
+// Make Program accessible for integration tests
+public partial class Program { }

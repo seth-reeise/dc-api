@@ -14,19 +14,29 @@ dc-api/
 ├── dc-api.sln                    # Solution file
 ├── Dockerfile                    # Docker build configuration
 ├── src/
-│   └── AdminService/             # Main ASP.NET Core Web API project
-│       ├── AdminService.csproj   # Project file (targets net8.0)
-│       ├── Program.cs            # Application entry point
-│       ├── Controllers/          # API controllers
-│       ├── Models/               # Domain models
-│       ├── Services/             # Business logic services
-│       └── appsettings.json      # Configuration
+│   ├── AdminService/             # Main ASP.NET Core Web API project
+│   │   ├── AdminService.csproj   # Project file (targets net8.0)
+│   │   ├── Program.cs            # Application entry point
+│   │   ├── Controllers/          # API controllers
+│   │   ├── Models/               # Domain models
+│   │   ├── Services/             # Business logic services
+│   │   └── appsettings.json      # Configuration
+│   └── AdminService.Tests/       # Test project (xUnit)
+│       ├── AdminService.Tests.csproj
+│       ├── Unit/                 # Unit tests
+│       │   └── CustomerControllerTests.cs
+│       └── Integration/          # Integration tests
+│           ├── CustomWebApplicationFactory.cs
+│           ├── CustomerControllerIntegrationTests.cs
+│           └── HealthControllerIntegrationTests.cs
 ```
 
 ### Namespaces
 - **AdminService.Controllers** - API controllers
 - **AdminService.Models** - Domain models
 - **AdminService.Services** - Service interfaces and implementations
+- **AdminService.Tests.Unit** - Unit tests
+- **AdminService.Tests.Integration** - Integration tests
 - **dc_api.Controllers** - Legacy namespace used in CustomerController
 
 ### Key Components
@@ -91,6 +101,21 @@ dotnet run --project src/AdminService/AdminService.csproj
 ### Restore
 ```bash
 dotnet restore src/AdminService/AdminService.csproj
+```
+
+### Test
+```bash
+# Run all tests
+dotnet test dc-api.sln
+
+# Run tests with verbose output
+dotnet test dc-api.sln --verbosity normal
+
+# Run specific test project
+dotnet test src/AdminService.Tests/AdminService.Tests.csproj
+
+# Run with coverage (requires coverlet)
+dotnet test dc-api.sln --collect:"XPlat Code Coverage"
 ```
 
 ### Docker Build
@@ -174,10 +199,28 @@ The search endpoint uses case-insensitive regex matching with starts-with patter
 - `firstName`
 - `lastName`
 
+## Testing
+
+### Test Structure
+- **Unit Tests** (`src/AdminService.Tests/Unit/`) - Test controllers with mocked services using Moq
+- **Integration Tests** (`src/AdminService.Tests/Integration/`) - Test HTTP endpoints using `WebApplicationFactory`
+
+### Test Packages
+- `xunit` (2.6.2) - Test framework
+- `Moq` (4.20.70) - Mocking framework
+- `Microsoft.AspNetCore.Mvc.Testing` (8.0.0) - Integration testing
+- `coverlet.collector` (6.0.0) - Code coverage
+
+### Test Coverage
+| Component | Test File | Tests |
+|-----------|-----------|-------|
+| CustomerController | `Unit/CustomerControllerTests.cs` | 14 tests covering CRUD operations |
+| CustomerController | `Integration/CustomerControllerIntegrationTests.cs` | 8 integration tests |
+| HealthController | `Integration/HealthControllerIntegrationTests.cs` | 3 tests |
+
 ## Important Notes
 
 - **CORS**: Wide open (allows all origins) - restrict in production
 - **Authentication**: Auth0 config exists but middleware is not enabled
-- **No tests**: No test projects exist in the solution
 - **Dockerfile mismatch**: Uses .NET 6.0 images while project targets .NET 8.0
 - **.NET 8.0**: Project uses modern .NET 8.0 with nullable reference types and implicit usings enabled

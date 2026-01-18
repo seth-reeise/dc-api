@@ -4,14 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-dc-api is the admin API for The Divine Canine, a .NET 8.0 ASP.NET Core Web API that manages customer data using MongoDB.
+dc-api is the admin API for The Divine Canine, a .NET 8.0 ASP.NET Core Web API that manages customer data using MongoDB. It provides CRUD operations for customer and pet information.
 
 ## Architecture
 
 ### Solution Structure
-- **Solution file**: `dc-api.sln` at root
-- **Main project**: `src/AdminService/` - Contains the ASP.NET Core Web API
-- **Namespace**: `dc_api` (with underscore, not hyphen)
+```
+dc-api/
+├── dc-api.sln                    # Solution file
+├── Dockerfile                    # Docker build configuration
+├── src/
+│   └── AdminService/             # Main ASP.NET Core Web API project
+│       ├── AdminService.csproj   # Project file (targets net8.0)
+│       ├── Program.cs            # Application entry point
+│       ├── Controllers/          # API controllers
+│       ├── Models/               # Domain models
+│       ├── Services/             # Business logic services
+│       └── appsettings.json      # Configuration
+```
+
+### Namespaces
+- **AdminService.Controllers** - API controllers
+- **AdminService.Models** - Domain models
+- **AdminService.Services** - Service interfaces and implementations
+- **dc_api.Controllers** - Legacy namespace used in CustomerController
 
 ### Key Components
 
@@ -20,24 +36,45 @@ dc-api is the admin API for The Divine Canine, a .NET 8.0 ASP.NET Core Web API t
 - Registers `ICustomerService` as a singleton
 - Enables CORS with policy "corsapp" (allows all origins, methods, headers)
 - Swagger enabled in development mode at `/swagger/v1/swagger.json`
-- Auth0 configuration present in appsettings (Domain: dev-eoiawrgb.us.auth0.com)
+- Auth0 configuration present in appsettings but authentication middleware is NOT enabled
 
 **Models** (`src/AdminService/Models/`)
-- `Customer` - Main domain model with MongoDB BSON attributes, stores customer and pet information
-- `MongoDBSettings` - Configuration model for MongoDB connection (ConnectionURI, DatabaseName, CollectionName)
+
+`Customer` - Main domain model with MongoDB BSON attributes:
+- `Id` - MongoDB ObjectId (stored as ObjectId, exposed as string)
+- `firstName`, `lastName` - Customer name
+- `phoneNumber`, `email` - Contact info
+- `addressLine1`, `addressLine2`, `city`, `state`, `zipcode` - Address
+- `vetName`, `vetPhoneNumber` - Veterinarian info
+- `dogName`, `dogBreed`, `dogAge` - Pet info
+- `notes`, `signature` - Additional data
+
+`MongoDBSettings` - Configuration model for MongoDB connection:
+- `ConnectionURI` - MongoDB connection string
+- `DatabaseName` - Database name
+- `CollectionName` - Collection name
 
 **Services** (`src/AdminService/Services/`)
-- `ICustomerService` - Interface defining customer operations (CRUD + search)
-- `CustomerService` - Implementation (not inspected but likely MongoDB-based)
+
+`ICustomerService` - Interface defining operations:
+- `CreateAsync(Customer)` - Create new customer
+- `GetAllCustomers()` - Get all customers
+- `SearchCustomers(string)` - Search by dogName, firstName, or lastName (regex, case-insensitive, starts-with)
+- `SearchCustomerById(string)` - Get customer by ID
+- `UpdateFirstName(string, string)` - Update customer's first name
+- `DeleteCustomer(string)` - Delete customer by ID
+
+`CustomerService` - MongoDB-based implementation using regex search
 
 **Controllers** (`src/AdminService/Controllers/`)
-- `CustomerController` - REST API at `/api/customer` with GET, POST, PUT, DELETE endpoints
-- `HealthController` - Health check endpoint (recently added)
+- `CustomerController` - REST API at `/api/customer`
+- `HealthController` - Health check at `/health`
 
-### MongoDB Integration
-- Uses MongoDB.Driver package
-- Customer IDs are stored as ObjectId in MongoDB but exposed as strings in the API
-- MongoDB settings configured via appsettings.json under "MongoDB" section
+### NuGet Packages
+- `MongoDB.Driver` (2.14.1) - MongoDB database driver
+- `Swashbuckle.AspNetCore` (6.1.5) - Swagger/OpenAPI support
+- `Newtonsoft.Json` (13.0.1) - JSON serialization
+- `Microsoft.AspNetCore.Mvc.Testing` (6.0.8) - Testing support
 
 ## Development Commands
 
@@ -66,24 +103,26 @@ docker build -t dc-api .
 docker run -p 8080:80 dc-api
 ```
 
-## Configuration Requirements
+**Note:** The Dockerfile uses .NET 6.0 SDK/runtime images, but the project targets .NET 8.0. Consider updating the Dockerfile to use .NET 8.0 images for consistency.
+
+## Configuration
 
 ### MongoDB Settings
 
-The application expects MongoDB configuration. Default placeholder values are in `appsettings.json`:
+The application expects MongoDB configuration in `appsettings.json`:
 ```json
 {
   "MongoDB": {
     "ConnectionURI": "mongodb://localhost:27017",
-    "DatabaseName": "divine_canine",
-    "CollectionName": "customers"
+    "DatabaseName": "The_divine_canine",
+    "CollectionName": "contract_form"
   }
 }
 ```
 
 ### Secrets Management
 
-**For local development**, use .NET User Secrets to override the connection string (never commit passwords):
+**For local development**, use .NET User Secrets to override the connection string:
 ```bash
 cd src/AdminService
 dotnet user-secrets set "MongoDB:ConnectionURI" "your-actual-connection-string-here"
@@ -101,24 +140,44 @@ To remove a secret:
 dotnet user-secrets remove "MongoDB:ConnectionURI"
 ```
 
-**For production**, use environment variables:
-- `MongoDB__ConnectionURI` (double underscore)
+**For production**, use environment variables (double underscore for nested keys):
+- `MongoDB__ConnectionURI`
 - `MongoDB__DatabaseName`
 - `MongoDB__CollectionName`
 
+### Auth0 Configuration
+
+Auth0 settings are present but authentication is not currently enabled:
+```json
+{
+  "Auth0": {
+    "Domain": "dev-eoiawrgb.us.auth0.com",
+    "Audience": "https://divinecanine/api"
+  }
+}
+```
+
 ## API Endpoints
 
-- `GET /api/customer` - Get all customers
-- `GET /api/customer/search?search={query}` - Search customers
-- `POST /api/customer` - Create customer
-- `PUT /api/customer/{id}` - Update customer first name
-- `DELETE /api/customer/{id}` - Delete customer
-- Health check endpoint (check HealthController for exact route)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check (returns "Healthy!") |
+| GET | `/api/customer` | Get all customers |
+| GET | `/api/customer/search?search={query}` | Search customers by name or dog name |
+| POST | `/api/customer` | Create new customer |
+| PUT | `/api/customer/{id}` | Update customer's first name |
+| DELETE | `/api/customer/{id}` | Delete customer |
+
+### Search Behavior
+The search endpoint uses case-insensitive regex matching with starts-with pattern on:
+- `dogName`
+- `firstName`
+- `lastName`
 
 ## Important Notes
 
-- The project was recently reorganized with a `src/` folder structure
-- .csproj file has been modified recently (currently unstaged in git)
-- No test projects exist in the solution currently
-- CORS is wide open (allows all origins) - consider restricting in production
-- Auth0 is configured but authentication/authorization middleware is not currently enabled
+- **CORS**: Wide open (allows all origins) - restrict in production
+- **Authentication**: Auth0 config exists but middleware is not enabled
+- **No tests**: No test projects exist in the solution
+- **Dockerfile mismatch**: Uses .NET 6.0 images while project targets .NET 8.0
+- **.NET 8.0**: Project uses modern .NET 8.0 with nullable reference types and implicit usings enabled
